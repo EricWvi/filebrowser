@@ -1,0 +1,11 @@
+.git
+.github
+**/node_modules
+frontend/dist
+web-prototype
+release
+.data
+.tmp
+memories
+*.log
+*.db

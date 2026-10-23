@@ -1,0 +1,99 @@
+version: "3"
+
+tasks:
+  default:
+    cmds:
+      - task: list
+
+  list:
+    desc: List all tasks in the current project
+    cmds:
+      - task --list
+
+  install:frontend:
+    desc: Install locked frontend dependencies (Node 24+)
+    dir: frontend
+    cmds:
+      - npm ci
+
+  install:go:
+    desc: Download Go module dependencies
+    cmds:
+      - go mod download
+
+  build:
+    desc: Build the release binary with the frontend embedded (release/filebrowser)
+    cmds:
+      - ./scripts/build.sh
+
+  build:frontend:
+    desc: Build the frontend static dist
+    dir: frontend
+    cmds:
+      - npm run build
+
+  clean:
+    desc: Remove release binaries and the built frontend dist
+    cmds:
+      - rm -rf release
+      - find frontend/dist -mindepth 1 ! -name .gitkeep -delete
+
+  format:
+    desc: Format Go sources with gofmt
+    cmds:
+      - gofmt -w cmd internal filebrowser.go
+
+  lint:
+    desc: Run all linters
+    cmds:
+      - task: lint:frontend
+      - task: lint:go
+
+  lint:frontend:
+    desc: Typecheck frontend source
+    dir: frontend
+    cmds:
+      - npm run typecheck
+
+  lint:go:
+    desc: Check gofmt and run go vet
+    silent: true
+    cmds:
+      - |
+        unformatted=$(gofmt -l cmd internal filebrowser.go)
+        if [ -n "$unformatted" ]; then
+          echo "gofmt needed (run task format):"
+          echo "$unformatted"
+          exit 1
+        fi
+      - go vet ./...
+
+  test:
+    desc: Run all lint and unit tests
+    cmds:
+      - task: lint
+      - task: test:go
+
+  test:go:
+    desc: Run Go unit and HTTP tests
+    cmds:
+      - go test ./...
+
+  run:web:
+    desc: Start the Vite dev server (proxies /api to :8090)
+    dir: frontend
+    cmds:
+      - npm run dev
+
+  run:server:
+    desc: "Serve ROOT (default: the parent directory) on :8090; favorites go to .data"
+    vars:
+      ROOT: '{{.ROOT | default ".."}}'
+    cmds:
+      - go run ./cmd/filebrowser -root {{.ROOT}} -db .data/filebrowser.db {{.CLI_ARGS}}
+
+  run:prototype:
+    desc: Start the UI prototype (mock data, variants via ?variant=A|B|C)
+    dir: web-prototype
+    cmds:
+      - pnpm dev

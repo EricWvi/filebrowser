@@ -23,3 +23,12 @@ dist-ssr/
 
 # Independent memory repository
 /memories/
+
+# Build output and local data
+/release/
+!frontend/dist/
+frontend/dist/*
+!frontend/dist/.gitkeep
+*.db
+*.db-shm
+*.db-wal
