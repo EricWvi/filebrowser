@@ -1,0 +1,198 @@
+@import "tailwindcss";
+
+:root {
+  --bg: #fbfbfa;
+  --bg-raised: #ffffff;
+  --fg: #1f2328;
+  --muted: #6e7277;
+  --faint: #a2a5a9;
+  --line: #e7e7e4;
+  --hover: #f2f2f0;
+  --active: #e8edf6;
+  --accent: #3a66c4;
+  --folder: #5f7fae;
+  --code-bg: #f6f6f4;
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #161719;
+    --bg-raised: #1d1e21;
+    --fg: #e3e3e1;
+    --muted: #8d9196;
+    --faint: #5c6066;
+    --line: #2a2c30;
+    --hover: #202226;
+    --active: #232a35;
+    --accent: #7ea3ef;
+    --folder: #8ba6d1;
+    --code-bg: #1b1c1f;
+    color-scheme: dark;
+  }
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-raised: var(--bg-raised);
+  --color-fg: var(--fg);
+  --color-muted: var(--muted);
+  --color-faint: var(--faint);
+  --color-line: var(--line);
+  --color-hover: var(--hover);
+  --color-active: var(--active);
+  --color-accent: var(--accent);
+  --color-folder: var(--folder);
+  --color-code: var(--code-bg);
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Noto Sans CJK SC", sans-serif;
+  --font-mono: "JetBrains Mono", "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+}
+
+html,
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Rows that open a context menu on long press must not trigger iOS callout or text selection. */
+.touch-row {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  scrollbar-width: none;
+}
+
+/* Shiki dual theme */
+.shiki,
+.shiki span {
+  color: var(--shiki-light);
+  background-color: transparent !important;
+}
+@media (prefers-color-scheme: dark) {
+  .shiki,
+  .shiki span {
+    color: var(--shiki-dark);
+  }
+}
+
+/* Markdown */
+.md {
+  font-size: 15px;
+  line-height: 1.65;
+  overflow-wrap: anywhere;
+}
+.md > * + * {
+  margin-top: 0.75em;
+}
+.md h1,
+.md h2,
+.md h3,
+.md h4 {
+  font-weight: 600;
+  line-height: 1.3;
+  margin-top: 1.4em;
+}
+.md h1 {
+  font-size: 1.5em;
+  margin-top: 0.2em;
+  padding-bottom: 0.25em;
+  border-bottom: 1px solid var(--line);
+}
+.md h2 {
+  font-size: 1.25em;
+  padding-bottom: 0.2em;
+  border-bottom: 1px solid var(--line);
+}
+.md h3 {
+  font-size: 1.1em;
+}
+.md a {
+  color: var(--accent);
+  text-decoration: none;
+}
+.md a:hover {
+  text-decoration: underline;
+}
+.md ul,
+.md ol {
+  padding-left: 1.4em;
+}
+.md ul {
+  list-style: disc;
+}
+.md ol {
+  list-style: decimal;
+}
+.md li + li {
+  margin-top: 0.15em;
+}
+.md li.task-list-item {
+  list-style: none;
+  margin-left: -1.3em;
+}
+.md li.task-list-item input {
+  margin-right: 0.45em;
+  vertical-align: -1px;
+}
+.md blockquote {
+  border-left: 3px solid var(--line);
+  padding-left: 0.8em;
+  color: var(--muted);
+}
+.md :not(pre) > code {
+  font-family: var(--font-mono);
+  font-size: 0.86em;
+  background: var(--code-bg);
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  padding: 0.05em 0.3em;
+}
+.md hr {
+  border: 0;
+  border-top: 1px solid var(--line);
+}
+.md img {
+  max-width: 100%;
+  border-radius: 3px;
+}
+.md .table-wrap {
+  overflow-x: auto;
+}
+.md table {
+  border-collapse: collapse;
+  font-size: 0.93em;
+  white-space: nowrap;
+}
+.md th,
+.md td {
+  border: 1px solid var(--line);
+  padding: 0.3em 0.6em;
+}
+.md th {
+  background: var(--code-bg);
+  font-weight: 600;
+}
+.md .katex-display {
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 0.2em 0;
+}
+
+/* Pressed state, see press.ts: on instantly, fade out on release. */
+.tap {
+  transition: background-color 180ms ease-out;
+}
+.tap[data-pressed] {
+  background-color: var(--active);
+  transition: none;
+}
