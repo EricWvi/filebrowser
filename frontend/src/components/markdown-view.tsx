@@ -2,6 +2,8 @@ import "katex/dist/katex.min.css";
 import type { Element, ElementContent } from "hast";
 import Markdown from "react-markdown";
 import rehypeKatex from "rehype-katex";
+import remarkCjkFriendly from "remark-cjk-friendly";
+import remarkCjkFriendlyGfmStrikethrough from "remark-cjk-friendly-gfm-strikethrough";
 import remarkGfm from "remark-gfm";
 import remarkMath from "remark-math";
 import { rawUrl } from "@/lib/api";
@@ -37,7 +39,8 @@ export default function MarkdownView({ path, source }: { path: string; source: s
     <article className="md mx-auto max-w-[760px] px-4 pt-3 pb-16">
       {frontmatter !== null && <CodeBlock code={frontmatter} lang="yaml" />}
       <Markdown
-        remarkPlugins={[remarkGfm, remarkMath]}
+        // CJK-friendly: close `**加粗。**后文` between full-width punctuation and CJK text.
+        remarkPlugins={[remarkGfm, remarkCjkFriendly, remarkCjkFriendlyGfmStrikethrough, remarkMath]}
         rehypePlugins={[rehypeKatex]}
         components={{
           pre: ({ node }) => {
